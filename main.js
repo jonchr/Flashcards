@@ -1,3 +1,4 @@
+//Imports BasicCard object, ClozeCard object, Object stored in database, and inquirer
 var BasicCard = require("./BasicCard.js");
 var ClozeCard = require("./ClozeCard.js");
 var database = require("./database.js");
@@ -8,33 +9,34 @@ inquirer.prompt([{
 
     type: "list",
     message: "What would you like to study?",
-    choices: ["history"], //to replace with subjects
+    choices: Object.keys(database), //pulls the various subjects stored in database
     name: "subject"
 
 }, {
 
     type: "list",
-    message: "What type of card would you like to use?",
+    message: "What type of cards would you like to use to study?",
     choices: ["Basic", "Cloze"],
     name: "cardType"
 
 }]).then(function(response) {
-    console.log("Hi mom!");
+
     //Loads database Info
     infoArray = database[response.subject];
 
+    //Creates the array of cards
     var cardsArray;
     if (response.cardType === "Basic") {
         cardsArray = createBasicCards(infoArray);
-    } else {
+    }
+    else {
         cardsArray = createClozeCards(infoArray);
     }
 
+    //Asks the questions
     askQuestion(cardsArray, 0);
 
-
 });
-
 
 //creates and returns an array of basic cards based off info in the passed array
 function createBasicCards(array) {
@@ -51,9 +53,7 @@ function createBasicCards(array) {
     }
 
     return cards;
-
 }
-
 
 //creates and returns an array of cloze cards based off info in the passed array
 function createClozeCards(array) {
@@ -70,11 +70,11 @@ function createClozeCards(array) {
     }
 
     return cards;
-
 }
 
+//Creates an array ordered [0, 1, 2, 3, ... , length-1];
 function randomize(length) {
-    //creates an array ordered [0, 1, 2, 3, ... , length-1];
+    
     var orderedArray = [];
     for (var i = 0; i < length; i++) {
         orderedArray.push(i);
@@ -89,6 +89,7 @@ function randomize(length) {
     return chaosArray;
 }
 
+//Asks the index number question in cardArray
 function askQuestion(cardArray, index) {
     //Extracts the question and answer based on whether it's a Basic or Cloze card
     var question = cardArray[index] instanceof BasicCard ? cardArray[index].front : cardArray[index].partialText
@@ -104,7 +105,8 @@ function askQuestion(cardArray, index) {
     }).then(function(response) {
         //Logs the answer
         console.log(answer + "\n");
-        //If they answered yes, asks the next question
-        if (response.continue) askQuestion(cardArray, index + 1);
+        //If they answered yes and there's another question, asks the next question
+        if (response.continue && index < cardArray.length - 1) askQuestion(cardArray, index + 1);
+        else console.log("You're done for now! Come back to study something else!\n");
     })
 }
