@@ -10,7 +10,7 @@ function ClozeCard (text, cloze) {
 
 	//The partial phrase without the cloze.
 	//Throws and error if the cloze doesn't appear in the text
-	if(text.indexOf(cloze) === -1)
+	if(text.indexOf(cloze) === -1) {
 		return console.log("Error; Cloze does not appear in phrase");
 	}
 	else {
