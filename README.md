@@ -9,7 +9,7 @@ The standard flashcards will ask you a question and then provide you with the an
 
 ### Development
 
-This application was developed as part of the GW Coding Bootcamp and was completed during the sixth week.
+This application was developed as part of the GW Coding Bootcamp and was completed during the sixth week. It makes use of Node's inquirer module to interact with the user before creating the flashcards using a local database file and the appropriate constructor.
 
 ### Organization
 
